@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Produto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h2>Cadastrar Produto</h2>
+    </div>
+    <div class="container">
+        <form id="cadastro-produto-form" class="form">
+            <label for="nome">Nome do Produto:</label>
+            <input type="text" id="nome" name="nome" required placeholder="Ex.: Pamonha">
+            <label for="preco">Preço (R$):</label>
+            <input type="number" id="preco" name="preco" min="0" step="0.01" required placeholder="Ex.: 10.00">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" placeholder="Ex.: Pamonha de milho fresco">
+           
+        </form>
+         <div class="buttons">
+                <button onclick="sendProtudo()">Salvar</button>
+                <a href="index.html" class="secondary-button">Cancelar</a>
+        </div>
+
+    </div>
+    <div class="voltar">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+    <script>
+        const baseUrl = 'http://localhost:3001'
+        function sendProtudo(){
+            const nome = document.getElementById("nome").value
+            const preco = parseFloat(document.getElementById("preco").value)
+            
+            const data = {
+                nome:nome,
+                preco:preco
+            }
+
+           
+            fetch(`${baseUrl}/api/produto`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json'}})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                alert(data.message)
+            })
+        
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos em Tempo Real</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h2>Pedidos Registrados</h2>
+    </div>
+    <div class="container">
+        <div id="pedidos"></div>
+        <button onclick="window.location.href='confirmar_pedido.html'">Confirmar Pedido</button>
+    </div>
+    <div class="voltar">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+    
+</body>
+
+<script>
+    const baseUrl = 'http://localhost:3001'
+    let pedidos;
+    const pedidosSection = document.getElementById("pedidos")
+    function getPedidos(){
+           fetch(`${baseUrl}/api/pedido`)
+            .then(response => response.json())
+            .then(data => {
+                pedidos = data.values
+
+                pedidos.forEach(element => {
+                    let pedido = document.createElement("div")
+                    pedido.innerText = `Pedido #${element.id}\n
+                    Cliente: ${element.nome}\n
+                    Data: ${new Date(element.data).toLocaleDateString()}\n
+                    Total: R$${element.total}\n
+                    Forma Pagamento: ${element.forma_pagamento}
+                    `
+
+                    pedidosSection.appendChild(pedido)
+                });
+            })
+    }
+    getPedidos()
+
+</script>
+
+</html>

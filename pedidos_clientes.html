@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizar Pedido</title>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+<body>
+    <div class="header">
+        <h2>Realizar Pedido</h2>
+    </div>
+    <div class="container">
+        <form id="pedido-form" class="form">
+            <label for="produto">Escolha o Produto:</label>
+
+            <select id="produtos" name="produto" required>
+                <option value="">Selecione o Produto: </option>
+            </select>
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" name="quantidade" min="1" required>
+            <label for="cliente">Escolha o Cliente:</label>
+
+            <select id="clientes" name="clientes" required>
+                <option value="">Selecione o Cliente: </option>
+            </select>
+
+         
+
+            <label for="pagamento">Forma de Pagamento:</label>
+            <select id="pagamento" name="pagamento" required>
+                <option value="cartao">Cartão</option>
+                <option value="dinheiro">Dinheiro</option>
+            </select>
+        </form>
+         <div class="buttons">
+            <button onclick="sendPedido()">Confirmar Pedido</button>
+        </div>
+
+    </div>
+    <div class="voltar">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+</body>
+ <script>
+        const baseUrl = 'http://localhost:3001'
+        let produtos;
+        let clientes;
+        const selectorProduto = document.getElementById("produtos")
+        const selectorCliente = document.getElementById("clientes")
+        function setProdutos(){
+            fetch(`${baseUrl}/api/produto`)
+            .then(response => response.json())
+            .then(data => {
+                produtos = data.values
+                produtos.forEach(element => {
+                    let produto = document.createElement("option")
+                    produto.value = element.id
+                    produto.innerText = element.nome
+                    selectorProduto.appendChild(produto)
+                });
+            })
+        }
+
+         function setClientes(){
+            fetch(`${baseUrl}/api/cliente`)
+            .then(response => response.json())
+            .then(data => {
+                clientes = data.values
+                clientes.forEach(element => {
+                    let cliente = document.createElement("option")
+                    cliente.value = element.id
+                    cliente.innerText = element.nome
+                    selectorCliente.appendChild(cliente)
+                });
+            })
+        }
+        setProdutos();
+        setClientes();
+
+        function sendPedido(){
+            
+            const id_produto = parseInt(selectorProduto.value)
+            const quantidade = parseInt(document.getElementById("quantidade").value)
+            const forma_pagamento = document.getElementById("pagamento").value
+            const cliente_id = parseInt(selectorCliente.value)
+
+            const data = {id_produto: id_produto, quantidade:quantidade, forma_pagamento:forma_pagamento, cliente_id:cliente_id}
+            console.log(data)
+            //fetch(`${baseUrl}/api/pedido`, {method:'POST', body:JSON.stringify()})
+            //.then(response => response.json())
+            //.then(data => {})
+            
+        }
+        
+    </script>
+</html>

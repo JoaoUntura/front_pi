@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de Funcionário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h2>Login de Funcionário</h2>
+    </div>
+    <div class="container">
+        <form id="login-funcionario-form" class="form">
+            <label for="usuario">Usuário:</label>
+            <input type="text" id="usuario" name="usuario" required>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+            <div class="buttons">
+                <button type="submit">Entrar</button>
+                <a href="cadastro_funcionario.html" class="secondary-button">Novo Funcionário</a>
+                <a href="recuperar_senha_funcionario.html" class="secondary-button">Esqueceu a Senha?</a>
+            </div>
+        </form>
+        <div id="feedback"></div>
+    </div>
+    <div class="voltar">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
