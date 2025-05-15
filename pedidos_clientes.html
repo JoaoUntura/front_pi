@@ -44,13 +44,15 @@
     </div>
 </body>
  <script>
-        const baseUrl = 'http://localhost:3001'
+        const baseUrl = 'http://18.231.170.201:80'
+        
         let produtos;
         let clientes;
         const selectorProduto = document.getElementById("produtos")
         const selectorCliente = document.getElementById("clientes")
         function setProdutos(){
-            fetch(`${baseUrl}/api/produto`)
+            let token = localStorage.getItem("token")
+            fetch(`${baseUrl}/api/produto`, {headers: {"Authorization":`Bearer ${token}`}})
             .then(response => response.json())
             .then(data => {
                 produtos = data.values
@@ -64,7 +66,8 @@
         }
 
          function setClientes(){
-            fetch(`${baseUrl}/api/cliente`)
+            let token = localStorage.getItem("token")
+            fetch(`${baseUrl}/api/cliente`, {headers: {"Authorization":`Bearer ${token}`}})
             .then(response => response.json())
             .then(data => {
                 clientes = data.values
@@ -80,14 +83,14 @@
         setClientes();
 
         function sendPedido(){
-            
+            let token = localStorage.getItem("token")
             const id_produto = parseInt(selectorProduto.value)
             const quantidade = parseInt(document.getElementById("quantidade").value)
             const forma_pagamento = document.getElementById("pagamento").value
             const cliente_id = parseInt(selectorCliente.value)
 
             const data = {id_produto: id_produto, quantidade:quantidade, forma_pagamento:forma_pagamento, cliente_id:cliente_id}
-            console.log(data)
+        
             //fetch(`${baseUrl}/api/pedido`, {method:'POST', body:JSON.stringify()})
             //.then(response => response.json())
             //.then(data => {})

@@ -12,8 +12,8 @@
     </div>
     <div class="container">
         <form id="login-funcionario-form" class="form">
-            <label for="usuario">Usuário:</label>
-            <input type="text" id="usuario" name="usuario" required>
+            <label for="usuario">Email:</label>
+            <input type="text" id="email" name="email" required>
             <label for="senha">Senha:</label>
             <input type="password" id="senha" name="senha" required>
             <div class="buttons">
@@ -27,6 +27,29 @@
     <div class="voltar">
         <a href="index.html">Voltar à Página Inicial</a>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const baseUrl = 'http://18.231.170.201:80'
+        
+        const form = document.getElementById("login-funcionario-form")
+        form.addEventListener("submit", function(e){
+            e.preventDefault()
+            const data = {email:form.email.value, password:form.senha.value}
+            
+            fetch(`${baseUrl}/api/login`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json'}})
+            .then(response => response.json())
+            .then(data => {
+                if (data.success){
+                    alert('Login bem sucedido!')
+                    localStorage.setItem("token", data.token)
+                }else{
+                    alert(data.message)
+                }
+            })
+        
+
+        
+
+        })
+    </script>
 </body>
 </html>

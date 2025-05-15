@@ -30,7 +30,7 @@
         <a href="index.html">Voltar à Página Inicial</a>
     </div>
     <script>
-        const baseUrl = 'http://localhost:3001'
+         const baseUrl = 'http://18.231.170.201:80'
         function sendProtudo(){
             const nome = document.getElementById("nome").value
             const preco = parseFloat(document.getElementById("preco").value)
@@ -40,8 +40,8 @@
                 preco:preco
             }
 
-           
-            fetch(`${baseUrl}/api/produto`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json'}})
+            let token = localStorage.getItem("token")
+            fetch(`${baseUrl}/api/produto`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json',"Authorization":`Bearer ${token}`}})
             .then(response => response.json())
             .then(data => {
                 console.log(data)
