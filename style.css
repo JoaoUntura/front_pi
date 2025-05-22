@@ -1,0 +1,303 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #2F3D3A; /* Cinza escuro suave para fundo */
+    color: #E0E0E0; /* Texto cinza claro */
+    line-height: 1.6;
+    position: relative;
+}
+
+.header {
+    background-color: #3D5A40; /* Verde escuro para o header */
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    min-height: 100px; /* Ajustado para acomodar os botões no topo */
+}
+
+.header img {
+    max-width: 150px;
+    margin-bottom: 0.5rem;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    color: #FFFFFF; /* Texto branco no header */
+}
+
+.login-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+}
+
+.login-button a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #3D5A40; /* Verde escuro */
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.login-button a:hover {
+    background-color: #4A6A4D; /* Verde mais claro no hover */
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+.back-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+}
+
+.back-button a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #3D5A40; /* Verde escuro */
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-button a:hover {
+    background-color: #4A6A4D; /* Verde mais claro no hover */
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+.main-content {
+    padding: 2rem;
+    min-height: calc(100vh - 60px);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #4A2C2A; /* Texto marrom para o conteúdo */
+}
+
+.nav-buttons {
+    max-width: 800px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column; /* Organiza os botões verticalmente */
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-buttons a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #3D5A40; /* Verde escuro */
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s; /* Transição para o efeito de hover */
+    text-align: center;
+    width: 200px; /* Largura fixa para consistência */
+}
+
+.nav-buttons a:hover {
+    background-color: #4A6A4D; /* Verde mais claro no hover */
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #3D5A40;
+}
+
+input, select {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #4A2C2A;
+    background-color: #F5F5F5;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #D4A017; /* Amarelo dourado */
+    box-shadow: 0 0 5px rgba(212, 160, 23, 0.3);
+}
+
+button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none; /* Sem borda */
+    background-color: #3D5A40;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 0.5rem; /* Espaçamento padrão para botões */
+}
+
+button:hover {
+    background-color: #4A6A4D;
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+.gerenciar-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.secondary-button {
+    background-color: #D4A017; /* Amarelo dourado */
+    border: 2px solid #4A2C2A; /* Mantendo o contorno original para contraste */
+}
+
+.secondary-button:hover {
+    background-color: #A68014;
+}
+
+.remover-button {
+    background-color: #8B4513; /* Vermelho terroso */
+    color: #FFFFFF;
+    border: none; /* Sem borda */
+}
+
+.remover-button:hover {
+    background-color: #6F3810;
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+.editar-button {
+    background-color: #D4A017; /* Amarelo dourado */
+    color: #FFFFFF;
+    border: none;
+    margin-right: 0.5rem;
+}
+
+.editar-button:hover {
+    background-color: #A68014;
+    transform: scale(1.05); /* Efeito de crescimento leve */
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* Remove o gap para alinhamento mais próximo */
+}
+
+.payment-options div {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-items: start;
+    margin: 0; /* Remove margens padrão */
+    padding: 0; /* Remove padding padrão */
+}
+
+.payment-options input[type="radio"] {
+    margin: 0;
+    width: 20px;
+    transform: scale(1.2); /* Aumenta um pouco o tamanho do radio button para destaque */
+
+}
+
+.payment-options label {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    white-space: nowrap; /* Garante que o texto não quebre */
+}
+
+#feedback {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #8BC34A; /* Verde claro para sucesso */
+}
+
+#feedback.error {
+    color: #8B4513; /* Vermelho terroso para erro */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #4A2C2A;
+}
+
+th {
+    background-color: #3D5A40;
+    color: #FFFFFF;
+}
+
+td {
+    color: #4A2C2A;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1.5rem;
+    }
+    .nav-buttons a {
+        width: 180px; /* Ajuste para telas menores */
+    }
+    .login-button {
+        right: 0.5rem;
+    }
+    .back-button {
+        left: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 1rem;
+    }
+    .header img {
+        max-width: 120px;
+    }
+    .header h1 {
+        font-size: 1.25rem;
+    }
+    .nav-buttons a {
+        width: 90%; /* Ajuste para ocupar quase toda a largura em telas muito pequenas */
+    }
+    .login-button a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    .back-button a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    table, th, td {
+        font-size: 0.9rem;
+    }
+}

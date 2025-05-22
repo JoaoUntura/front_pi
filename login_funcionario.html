@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor do Campo - Login Funcionário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="back-button">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+
+    <header class="header">
+        <img src="logo_sabor_do_campo.png" alt="Sabor do Campo - Hortifruti">
+        <h1>Sabor do Campo - Hortifruti</h1>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <h2>Login Funcionário</h2>
+            <form id="login-funcionario-form">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario" required>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+                <button type="submit">Entrar</button>
+                <div id="feedback"></div>
+            </form>
+        </div>
+    <script src="script.js"></script>   
+    <script>
+        const baseUrl = 'http://18.231.170.201:80'
+        
+        const form = document.getElementById("login-funcionario-form")
+        form.addEventListener("submit", function(e){
+            e.preventDefault()
+            const data = {email:form.usuario.value, password:form.senha.value}
+            
+            fetch(`${baseUrl}/api/login`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json'}})
+            .then(response => response.json())
+            .then(data => {
+                if (data.success){
+                    alert('Login bem sucedido!')
+                    
+                    localStorage.setItem("token", data.token)
+                }else{
+                    alert(data.message)
+                }
+            })
+        
+
+        
+
+        })
+    </script>
+</body>
+</html>

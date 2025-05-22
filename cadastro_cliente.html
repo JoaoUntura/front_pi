@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor do Campo - Cadastro de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="back-button">
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+
+    <header class="header">
+        <img src="logo_sabor_do_campo.png" alt="Sabor do Campo - Hortifruti">
+        <h1>Sabor do Campo - Hortifruti</h1>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <h2>Cadastro de Clientes</h2>
+            <form id="form-cliente">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" name="telefone" placeholder="(XX) XXXX-XXXX" required>
+                <button type="submit">Salvar</button>
+                <button type="button" id="gerenciar-clientes" class="gerenciar-button">Gerenciar Clientes</button>
+                <div id="feedback"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+
+        const baseUrl = 'http://18.231.170.201:80'
+
+        const form = document.getElementById("form-cliente")
+        form.addEventListener("submit", function(e){
+            e.preventDefault()
+            const data = {nome:form.nome.value, contato:form.telefone.value}
+            
+            let token = localStorage.getItem("token")
+            fetch(`${baseUrl}/api/cliente`, {method:'POST', body:JSON.stringify(data),headers: {'Content-Type': 'application/json',"Authorization":`Bearer ${token}`}})
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message)
+            })
+        })
+
+    </script>
+</body>
+</html>
