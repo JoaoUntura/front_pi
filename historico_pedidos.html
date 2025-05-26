@@ -23,31 +23,153 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Cliente</th>
-                        <th>Forma de Pagamento</th>
                         <th>Data</th>
+                        <th>Forma Pagamento</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
                         <th>Entregue</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Tomate</td>
-                        <td>5</td>
-                        <td>João Silva</td>
-                        <td>Cartão</td>
-                        <td>2025-05-20 14:30</td>
-                        <td>
-                        <input type="checkbox"/>
-                        </td>
-                    </tr>
-                  
+                <tbody> 
                 </tbody>
             </table>
             <div id="feedback"></div>
         </div>
     <script src="script.js"></script>
+    <script>
+            const baseUrl = 'http://18.231.170.201:80'
+
+            const table = document.getElementById("pedidos-tabela")
+
+            function setPedidos(){
+            let token = localStorage.getItem("token")
+            fetch(`${baseUrl}/api/pedido`, {headers: {"Authorization":`Bearer ${token}`}})
+            .then(response => response.json())
+            .then(data => {
+                pedidos = data.values
+                console.log(pedidos)
+                pedidos.forEach(element => {
+
+                    let dataFormatada = new Date(element.data).toISOString().split('T')[0];
+
+                    let row = document.createElement("tr")
+                    row.id = `${element.id}`
+
+                    let id = document.createElement("td")
+                    id.innerText = element.id
+
+                    let data = document.createElement("td")
+                    data.innerHTML = `
+                    <input value="${dataFormatada}" type="date" id=data-${element.id}> </input>
+                    `
+
+                    let formaPagamento = document.createElement("td")
+                    formaPagamento.innerHTML = `
+                    <input value="${element.forma_pagamento || "Não Informado"}" type="text" id=formaPagamento-${element.id} step="0.01"> </input>
+                    `
+
+                    let cliente = document.createElement("td")
+                    cliente.innerHTML = `
+                    <input value="${element.nome}" type="text" id=cliente-${element.id} step="0.01"> </input>
+                    `
+
+                    let total = document.createElement("td")
+                    total.innerHTML = `
+                    <input value="${element.total}" type="number" id=total-${element.id} step="0.01"> </input>
+                    `
+                
+                    let entregue = document.createElement("td")
+                    entregue.innerHTML = `
+                    <input ${element.entregue ? 'checked' : ''} type="checkbox" id=entregue-${element.id} step="0.01"> </input>
+                    `
+
+                    let buttons = document.createElement("td")
+               
+                    let button_editar =  document.createElement("button")
+                    button_editar.innerText = 'Atualizar'
+                    button_editar.className = "editar-button"
+                    button_editar.onclick = () => atualizarPedido(element.id)
+
+                    let button_remover = document.createElement("button")
+                    button_remover.innerText = 'Remover'
+                    button_remover.className = "remover-button"
+                    button_remover.onclick = () => deletePedido(element.id)
+
+                    buttons.appendChild(button_editar)
+                    buttons.appendChild(button_remover)
+
+                    row.appendChild(id)
+                    row.appendChild(data)
+                    row.appendChild(formaPagamento)
+                    row.appendChild(cliente)
+                    row.appendChild(total)
+                    row.appendChild(entregue)
+                    row.appendChild(buttons)
+
+                    table.appendChild(row)
+
+                    });
+            })
+
+            }
+
+            setPedidos()
+
+            function atualizarPedido(id) {
+                let token = localStorage.getItem("token")
+
+                let inputData = document.getElementById(`data-${id}`)
+                let inputFormaPagamento = document.getElementById(`formaPagamento-${id}`)
+                let inputCliente = document.getElementById(`cliente-${id}`)
+                let inputTotal = document.getElementById(`total-${id}`)
+                let inputEntregue = document.getElementById(`entregue-${id}`)
+
+                const data = {
+                    data: inputData.value,
+                    forma_pagamento: inputFormaPagamento.value,
+                    nome: inputCliente.value,
+                    total: parseFloat(inputTotal.value),
+                    entregue: inputEntregue.checked
+                }
+
+                console.log(data)
+
+                fetch(`${baseUrl}/api/pedido/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    alert(data.message)
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar pedido:', error)
+                    alert('Erro ao atualizar pedido.')
+                })
+        }
+
+        function deletePedido(id){
+        let token = localStorage.getItem("token")
+        fetch(`${baseUrl}/api/pedido/${id}`, {method:'DELETE', headers:{"Authorization":`Bearer ${token}`} })
+        .then(response => response.json())
+        .then(data => {
+        
+            alert(data.message)
+
+            if (data.success){
+                let row = document.getElementById(id)
+                table.removeChild(row)
+            }
+        
+        })
+      }
+
+    </script>
 </body>
 </html>
