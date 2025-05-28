@@ -23,12 +23,20 @@
         </div>
 
         <div class="nav-buttons">
+            <a href="criar_pedidos.html">Novo Pedido</a>
+            <a href="historico_pedidos.html">Gerenciar Pedidos</a>
             <a href="cadastro_cliente.html">Cadastrar Cliente</a>
             <a href="cadastro_produto.html">Cadastrar Produto</a>
-            <a href="criar_pedidos.html">Gerenciar Pedidos</a>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        let token = localStorage.getItem("token");
+        if (!token) {
+            alert("Você precisa fazer login para acessar esta página.");
+            window.location.href = "login_funcionario.html";
+        }
+    </script>
 </body>
 </html>

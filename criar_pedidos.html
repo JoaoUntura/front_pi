@@ -27,7 +27,19 @@
 
                 <label for="quantidade">Quantidade:</label>
                 <input type="number" id="quantidade" name="quantidade" min="1" required>
-                <button type="button" id="adicionar-carrinho" onclick="addCarrinho()">Adicionar ao Carrinho</button>
+                <button type="button" id="adicionar-carrinho" onclick="addCarrinho()">Adicionar ao Carrinho +</button>
+                
+                <h3>Itens no Carrinho</h3>
+                <table id="carrinho-tabela">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carrinho-tabela-body"></tbody>
+                </table>
 
                 <label>Escolha o Cliente:</label>
                 <select id="cliente" name="cliente" required>
@@ -58,17 +70,7 @@
                     <option value="nao">Não entregue</option>
                 </select>
 
-                <h3>Itens no Carrinho</h3>
-                <table id="carrinho-tabela">
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
-                            <th>Valor Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="carrinho-tabela-body"></tbody>
-                </table>
+             
                 <p id="total" class="total">Total Pedido: R$0.00</p>
                 <button type="button" onclick="sendPedido()">Confirmar Pedido</button>
                 
@@ -158,9 +160,12 @@
             inputQuantidade.value = 0;
             selectorProduto.value = ''; 
 
+            alert(`Produto ${produtoSelecionado.nome} adicionado ao carrinho!`)
+
         }
 
         function sendPedido(){
+
             let token = localStorage.getItem("token")
            
             const inputs = document.querySelectorAll('input[type="radio"][name="pagamento"]')
@@ -184,7 +189,18 @@
 
                 if (data.success){
                 console.log(data)
+
                 alert('Pedido realizado com sucesso!')
+
+                for(let item of pedido){
+
+                    item.pedido_id = parseInt(data.values[0].id)
+                    fetch(`${baseUrl}/api/pedido_produto`, {method:'POST', body:JSON.stringify(item), headers: {'Content-Type': 'application/json',"Authorization":`Bearer ${token}`}})
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    })
+                }
                 
                 }else{
                     alert(data.message)

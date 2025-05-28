@@ -17,15 +17,16 @@
     </header>
 
     <div class="main-content">
-        <div class="container">
+        <div class="container_pedidos">
             <h2>Histórico de Pedidos</h2>
             <table id="pedidos-tabela">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Data</th>
-                        <th>Forma Pagamento</th>
+                        <th>Produtos</th>
                         <th>Cliente</th>
+                        <th>Pagamento</th>
                         <th>Total</th>
                         <th>Entregue</th>
                         <th>Ações</th>
@@ -41,15 +42,26 @@
             const baseUrl = 'http://18.231.170.201:80'
 
             const table = document.getElementById("pedidos-tabela")
-
+            let produtos = [];
             function setPedidos(){
+
             let token = localStorage.getItem("token")
+            
+            fetch(`${baseUrl}/api/pedido_produto`, {headers: {"Authorization":`Bearer ${token}`}})
+            .then(response => response.json())
+            .then(data => {
+                produtos = data.values
+             
+            })
+
             fetch(`${baseUrl}/api/pedido`, {headers: {"Authorization":`Bearer ${token}`}})
             .then(response => response.json())
             .then(data => {
                 pedidos = data.values
                 console.log(pedidos)
                 pedidos.forEach(element => {
+
+                    let produto_pedido = produtos.filter(prod => (prod.pedido_id === element.id));
 
                     let dataFormatada = new Date(element.data).toISOString().split('T')[0];
 
@@ -58,6 +70,12 @@
 
                     let id = document.createElement("td")
                     id.innerText = element.id
+
+                    let produtosRow = document.createElement("td")
+                    produtosRow.innerText = produto_pedido.map(prod => {
+                        return prod.nome && prod.quantidade ? `${prod.nome} (${prod.quantidade})` : prod.nome || "Produto sem nome";
+                    }).join(' ');
+
 
                     let data = document.createElement("td")
                     data.innerHTML = `
@@ -70,10 +88,7 @@
                     `
 
                     let cliente = document.createElement("td")
-                    cliente.innerHTML = `
-                    <input value="${element.nome}" type="text" id=cliente-${element.id} step="0.01"> </input>
-                    `
-
+                    cliente.innerHTML = element.nome || "Não Informado"
                     let total = document.createElement("td")
                     total.innerHTML = `
                     <input value="${element.total}" type="number" id=total-${element.id} step="0.01"> </input>
@@ -101,11 +116,13 @@
 
                     row.appendChild(id)
                     row.appendChild(data)
-                    row.appendChild(formaPagamento)
+                    row.appendChild(produtosRow)
                     row.appendChild(cliente)
+                    row.appendChild(formaPagamento)
                     row.appendChild(total)
                     row.appendChild(entregue)
                     row.appendChild(buttons)
+                  
 
                     table.appendChild(row)
 
@@ -121,21 +138,20 @@
 
                 let inputData = document.getElementById(`data-${id}`)
                 let inputFormaPagamento = document.getElementById(`formaPagamento-${id}`)
-                let inputCliente = document.getElementById(`cliente-${id}`)
+              
                 let inputTotal = document.getElementById(`total-${id}`)
                 let inputEntregue = document.getElementById(`entregue-${id}`)
 
                 const data = {
                     data: inputData.value,
                     forma_pagamento: inputFormaPagamento.value,
-                    nome: inputCliente.value,
                     total: parseFloat(inputTotal.value),
                     entregue: inputEntregue.checked
                 }
 
                 console.log(data)
 
-                fetch(`${baseUrl}/api/pedido/${id}`, {
+                fetch(`${baseUrl}/api/pedido/${parseInt(id)}`, {
                     method: 'PUT',
                     body: JSON.stringify(data),
                     headers: {

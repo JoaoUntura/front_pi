@@ -89,6 +89,16 @@ body {
     color: #4A2C2A; /* Texto marrom para o conteúdo */
 }
 
+.container_pedidos{
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #4A2C2A; /* Texto marrom para o conteúdo */
+}
+
 .nav-buttons {
     max-width: 800px;
     margin: 1rem auto;
@@ -142,6 +152,19 @@ input:focus, select:focus {
     outline: none;
     border-color: #D4A017; /* Amarelo dourado */
     box-shadow: 0 0 5px rgba(212, 160, 23, 0.3);
+}
+
+input[type="checkbox"] {
+    margin: 0;
+    
+    transform: scale(1.5); /* Aumenta um pouco o tamanho do radio button para destaque */
+}
+
+input[type="checkbox"]:hover {
+
+    cursor: pointer;
+    transform: scale(1.7); /* Aumenta um pouco o tamanho do radio button para destaque */
+    transition: all 0.3s ease; /* Transição suave para o hover */
 }
 
 button {
@@ -222,6 +245,7 @@ button:hover {
 
 }
 
+
 .payment-options label {
     margin: 0;
     padding: 0;
@@ -259,6 +283,7 @@ th, td {
 
 th {
     background-color: #3D5A40;
+    border-radius: 0px 0px 0px 0px; /* Cantos arredondados apenas na parte inferior */
     color: #FFFFFF;
 }
 
