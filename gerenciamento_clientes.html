@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabor do Campo - Gerenciamento de Clientes</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="login-button">
         <a href="login_funcionario.html">Login</a>
@@ -23,7 +25,7 @@
     <div class="main-content">
         <div class="container">
             <h2>Gerenciamento de Clientes</h2>
-       
+
             <table id="clientes-tabela">
                 <thead>
                     <tr>
@@ -34,101 +36,106 @@
                     </tr>
                 </thead>
                 <tbody id="tb_body">
-                    
+
                 </tbody>
             </table>
             <div id="feedback"></div>
         </div>
 
-   
-      <script>
-        const baseUrl = 'http://18.231.170.201:80'
-        const table = document.getElementById("tb_body")
-        let clientes;
-           function setClientes(){
-            let token = localStorage.getItem("token")
-            fetch(`${baseUrl}/api/cliente`, {headers: {"Authorization":`Bearer ${token}`}})
-            .then(response => response.json())
-            .then(data => {
-                clientes = data.values
-                clientes.forEach(element => {
-                    console.log(element)
-                    let row = document.createElement("tr")
-                    row.id = `${element.id}`
 
-                    
-                    let id = document.createElement("td")
-                    id.innerText = element.id
+        <script>
+            const baseUrl = 'http://18.231.170.201:80'
+            const table = document.getElementById("tb_body")
+            let clientes;
+            function setClientes() {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/cliente`, { headers: { "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+                        clientes = data.values
+                        clientes.forEach(element => {
+                            console.log(element)
+                            let row = document.createElement("tr")
+                            row.id = `${element.id}`
 
-                    let nome = document.createElement("td")
-                    nome.innerHTML = `
+
+                            let id = document.createElement("td")
+                            id.innerText = element.id
+
+                            let nome = document.createElement("td")
+                            nome.innerHTML = `
                     <input value="${element.nome}" type="text" id=nome-${element.id}> </input>
                     `
 
-                    let contato = document.createElement("td")
-                    contato.innerHTML = `
+                            let contato = document.createElement("td")
+                            contato.innerHTML = `
                     <input value="${element.contato || 'Não Informado'}" type="text" id=contato-${element.id}> </input>
                     `
-             
-                  
-                    let buttons = document.createElement("td")
-                    let button_editar =  document.createElement("button")
-                    button_editar.innerText = 'Editar'
-                    button_editar.className = "editar-button"
-                         button_editar.onclick = () => atualizarCliente(element.id)
 
-                    let button_remover = document.createElement("button")
-                    button_remover.innerText = 'Remover'
-                    button_remover.className = "remover-button"
-                    button_remover.onclick = () => deleteCliente(element.id)
 
-                    buttons.appendChild(button_editar)
-                    buttons.appendChild(button_remover)
-                    
-                    row.appendChild(id)
-                    row.appendChild(nome)
-                    row.appendChild(contato)
-                    row.appendChild(buttons)
+                            let buttons = document.createElement("td")
+                            let button_editar = document.createElement("button")
+                            button_editar.innerText = 'Atualizar'
+                            button_editar.className = "editar-button"
+                            button_editar.onclick = () => atualizarCliente(element.id)
 
-                    table.appendChild(row)
-                });
-            })
-        }
-        setClientes();
+                            let button_remover = document.createElement("button")
+                            button_remover.innerText = 'Remover'
+                            button_remover.className = "remover-button"
+                            button_remover.onclick = () => deleteCliente(element.id)
 
-          function deleteCliente(id){
-            let token = localStorage.getItem("token")
-           fetch(`${baseUrl}/api/cliente/${id}`, {method:'DELETE', headers:{"Authorization":`Bearer ${token}`} })
-            .then(response => response.json())
-            .then(data => {
-            
-                alert(data.message)
+                            buttons.appendChild(button_editar)
+                            buttons.appendChild(button_remover)
+
+                            row.appendChild(id)
+                            row.appendChild(nome)
+                            row.appendChild(contato)
+                            row.appendChild(buttons)
+
+                            table.appendChild(row)
+                        });
+                    })
+            }
+            setClientes();
+
+            function deleteCliente(id) {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/cliente/${id}`, { method: 'DELETE', headers: { "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        alert(data.message)
+                        console.log(data)
+                        if (data.success) {
+                            let row = document.getElementById(id)
+                            table.removeChild(row)
+                        }
+
+                    })
+            }
+
+            function atualizarCliente(id) {
+                let inputNome = document.getElementById(`nome-${id}`)
+                let inputContato = document.getElementById(`contato-${id}`)
+                let token = localStorage.getItem("token")
+                const data = { nome: inputNome.value, contato: inputContato.value }
                 console.log(data)
-                if (data.success){
-                    let row = document.getElementById(id)
-                    table.removeChild(row)
-                }
-               
-            })
-      }
+                fetch(`${baseUrl}/api/cliente/${id}`, {
+                    method: 'PUT', body: JSON.stringify(data), headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        alert(data.message)
 
-            function atualizarCliente(id){
-            let inputNome = document.getElementById(`nome-${id}`)
-            let inputContato = document.getElementById(`contato-${id}`)
-            let token = localStorage.getItem("token")
-            const data = {nome:inputNome.value, contato:inputContato.value}
-            console.log(data)
-           fetch(`${baseUrl}/api/cliente/${id}`, {method:'PUT', body:JSON.stringify(data) ,headers:{'Content-Type': 'application/json',
-           "Authorization":`Bearer ${token}`} })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                alert(data.message)
-               
-            })
-      }
-      
+                    })
+            }
 
-      </script>
+
+        </script>
 </body>
+
 </html>

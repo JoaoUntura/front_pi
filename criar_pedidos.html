@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabor do Campo - Gerenciar Pedidos</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="back-button">
         <a href="index.html">Voltar à Página Inicial</a>
@@ -28,7 +30,7 @@
                 <label for="quantidade">Quantidade:</label>
                 <input type="number" id="quantidade" name="quantidade" min="1" required>
                 <button type="button" id="adicionar-carrinho" onclick="addCarrinho()">Adicionar ao Carrinho +</button>
-                
+
                 <h3>Itens no Carrinho</h3>
                 <table id="carrinho-tabela">
                     <thead>
@@ -46,23 +48,23 @@
                     <option value="">Selecione um cliente</option>
                 </select>
 
-                    
+
                 <label for="data">Data do Pedido:</label>
                 <input type="date" id="data" name="data">
 
                 <label>Forma de Pagamento:</label>
                 <div class="payment-options">
-                    
+
                     <div>
-                        <input type="radio" id="dinheiro" name="pagamento" value="dinheiro">
+                        <input type="radio" id="dinheiro" name="pagamento" value="Dinheiro">
                         <label for="dinheiro">Dinheiro</label>
                     </div>
-                        <div>
-                        <input type="radio" id="pix" name="pagamento" value="pix">
+                    <div>
+                        <input type="radio" id="pix" name="pagamento" value="Pix">
                         <label for="pix">Pix</label>
                     </div>
                 </div>
-    
+
 
                 <label>Entrega:</label>
                 <select id="entrega" name="entrega" required>
@@ -70,144 +72,149 @@
                     <option value="nao">Não entregue</option>
                 </select>
 
-             
+
                 <p id="total" class="total">Total Pedido: R$0.00</p>
                 <button type="button" onclick="sendPedido()">Confirmar Pedido</button>
-                
+
                 <button type="button" id="historico-pedidos" class="gerenciar-button">Histórico de Pedidos</button>
                 <div id="feedback"></div>
-            </form>          
-            
+            </form>
+
         </div>
-         <script src="script.js"></script>
-    <script>
-        const baseUrl = 'http://18.231.170.201:80'
-        
-        let produtos;
-        let clientes;
-        let pedido = [];
-        let total = 0;
-        const selectorProduto = document.getElementById("produto")
-        const inputQuantidade = document.getElementById("quantidade")
-        const selectorCliente = document.getElementById("cliente")
-        const entregaSelector = document.getElementById("entrega")
-        const carrinho = document.getElementById("carrinho-tabela-body")
-        const totalText = document.getElementById("total")
-        
+        <script src="script.js"></script>
+        <script>
+            const baseUrl = 'http://18.231.170.201:80'
 
-        function setProdutos(){
-            let token = localStorage.getItem("token")
-            fetch(`${baseUrl}/api/produto`, {headers: {"Authorization":`Bearer ${token}`}})
-            .then(response => response.json())
-            .then(data => {
-                produtos = data.values
-                produtos.forEach(element => {
-                    let produto = document.createElement("option")
-                    produto.value = element.id
-                    produto.innerText = element.nome
-                    selectorProduto.appendChild(produto)
-                });
-            })
-        }
+            let produtos;
+            let clientes;
+            let pedido = [];
+            let total = 0;
+            const selectorProduto = document.getElementById("produto")
+            const inputQuantidade = document.getElementById("quantidade")
+            const selectorCliente = document.getElementById("cliente")
+            const entregaSelector = document.getElementById("entrega")
+            const carrinho = document.getElementById("carrinho-tabela-body")
+            const totalText = document.getElementById("total")
 
-        function setClientes(){
-            let token = localStorage.getItem("token")
-            fetch(`${baseUrl}/api/cliente`, {headers: {"Authorization":`Bearer ${token}`}})
-            .then(response => response.json())
-            .then(data => {
-                clientes = data.values
-                clientes.forEach(element => {
-                    let cliente = document.createElement("option")
-                    cliente.value = element.id
-                    cliente.innerText = element.nome
-                    selectorCliente.appendChild(cliente)
-                });
-            })
-        }
-        setProdutos();
-        setClientes();
 
-        function addCarrinho(){
-
-            const id_produto = parseInt(selectorProduto.value)
-            const produtoSelecionado = produtos.find(produto =>  (parseInt(produto.id) === id_produto))
-            const quantidade = parseInt(inputQuantidade.value)
-
-            
-            let row = document.createElement("tr")
-            row.id = `${produtoSelecionado.id}`
-
-            let nome = document.createElement("td")
-            nome.innerText = produtoSelecionado.nome
-
-            let quantidadeRow = document.createElement("td")
-            quantidadeRow.innerText = quantidade
-
-            let subtotal = quantidade * parseFloat(produtoSelecionado.preco)
-            total += subtotal
-            totalText.innerText = `Total Pedido: R$${total.toFixed(2)}`
-
-            let totalRow = document.createElement("td")
-            totalRow.innerText = `R$${subtotal.toFixed(2)}`
-            
-            row.appendChild(nome)
-            row.appendChild(quantidadeRow)
-            row.appendChild(totalRow)
-            
-            carrinho.appendChild(row)
-
-            pedido.push({pedido_id:null, produto_id:id_produto, quantidade:quantidade})
-            inputQuantidade.value = 0;
-            selectorProduto.value = ''; 
-
-            alert(`Produto ${produtoSelecionado.nome} adicionado ao carrinho!`)
-
-        }
-
-        function sendPedido(){
-
-            let token = localStorage.getItem("token")
-           
-            const inputs = document.querySelectorAll('input[type="radio"][name="pagamento"]')
-            let forma_pagamento;
-            inputs.forEach((element) => {
-                if (element.checked) {
-                forma_pagamento = element.value;
-                }
-            });
-        
-            const data = document.getElementById('data').value
-            const cliente_id = parseInt(selectorCliente.value)
-            const entregue = entregaSelector.value === 'concluida' ? true : false
-
-            const data_pedido = {data: data, cliente_id:cliente_id, total:total, forma_pagamento:forma_pagamento, entregue:entregue}
-            
-            console.log(data_pedido)
-            fetch(`${baseUrl}/api/pedido`, {method:'POST', body:JSON.stringify(data_pedido),  headers: {'Content-Type': 'application/json',"Authorization":`Bearer ${token}`}})
-            .then(response => response.json())
-            .then(data => {
-
-                if (data.success){
-                console.log(data)
-
-                alert('Pedido realizado com sucesso!')
-
-                for(let item of pedido){
-
-                    item.pedido_id = parseInt(data.values[0].id)
-                    fetch(`${baseUrl}/api/pedido_produto`, {method:'POST', body:JSON.stringify(item), headers: {'Content-Type': 'application/json',"Authorization":`Bearer ${token}`}})
+            function setProdutos() {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/produto`, { headers: { "Authorization": `Bearer ${token}` } })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
+                        produtos = data.values
+                        produtos.forEach(element => {
+                            let produto = document.createElement("option")
+                            produto.value = element.id
+                            produto.innerText = element.nome
+                            selectorProduto.appendChild(produto)
+                        });
                     })
-                }
-                
-                }else{
-                    alert(data.message)
-                }
-                })
-                
-        }
-    </script>
+            }
+
+            function setClientes() {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/cliente`, { headers: { "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+                        clientes = data.values
+                        clientes.forEach(element => {
+                            let cliente = document.createElement("option")
+                            cliente.value = element.id
+                            cliente.innerText = element.nome
+                            selectorCliente.appendChild(cliente)
+                        });
+                    })
+            }
+            setProdutos();
+            setClientes();
+
+            function addCarrinho() {
+
+                const id_produto = parseInt(selectorProduto.value)
+                const produtoSelecionado = produtos.find(produto => (parseInt(produto.id) === id_produto))
+                const quantidade = parseInt(inputQuantidade.value)
+
+
+                pedido.push({ pedido_id: null, produto_id: id_produto, quantidade: quantidade })
+
+                let row = document.createElement("tr")
+                row.id = `${produtoSelecionado.id}`
+
+                let nome = document.createElement("td")
+                nome.innerText = produtoSelecionado.nome
+
+                let quantidadeRow = document.createElement("td")
+                quantidadeRow.innerText = quantidade
+
+                let subtotal = quantidade * parseFloat(produtoSelecionado.preco)
+                total += subtotal
+                totalText.innerText = `Total Pedido: R$${total.toFixed(2)}`
+
+                let totalRow = document.createElement("td")
+                totalRow.innerText = `R$${subtotal.toFixed(2)}`
+
+                row.appendChild(nome)
+                row.appendChild(quantidadeRow)
+                row.appendChild(totalRow)
+
+                carrinho.appendChild(row)
+
+               
+                inputQuantidade.value = 0;
+                selectorProduto.value = '';
+
+                alert(`Produto ${produtoSelecionado.nome} adicionado ao carrinho!`)
+
+            }
+
+            function sendPedido() {
+
+                let token = localStorage.getItem("token")
+
+                const inputs = document.querySelectorAll('input[type="radio"][name="pagamento"]')
+                let forma_pagamento;
+                inputs.forEach((element) => {
+                    if (element.checked) {
+                        forma_pagamento = element.value;
+                    }
+                });
+
+                const data = document.getElementById('data').value
+                const cliente_id = parseInt(selectorCliente.value)
+                const entregue = entregaSelector.value === 'concluida' ? true : false
+
+                const data_pedido = { data: data, cliente_id: cliente_id, total: total, forma_pagamento: forma_pagamento, entregue: entregue }
+
+           
+                fetch(`${baseUrl}/api/pedido`, { method: 'POST', body: JSON.stringify(data_pedido), headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if (data.success) {
+                            console.log(data)
+
+                            alert('Pedido realizado com sucesso!')
+
+                            for (let item of pedido) {
+
+                                item.pedido_id = parseInt(data.values[0].id)
+                                fetch(`${baseUrl}/api/pedido_produto`, { method: 'POST', body: JSON.stringify(item), headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${token}` } })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data)
+                                    })
+                            }
+
+                            window.location.href = "historico_pedidos.html"
+
+                        } else {
+                            alert(data.message)
+                        }
+                    })
+
+            }
+        </script>
 </body>
+
 </html>

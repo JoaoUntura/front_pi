@@ -9,6 +9,7 @@
 <body>
     <div class="login-button">
         <a href="login_funcionario.html">Login</a>
+        <button onclick="logout()">Sair</button>
     </div>
 
     <header class="header">
@@ -30,11 +31,15 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
         let token = localStorage.getItem("token");
         if (!token) {
             alert("Você precisa fazer login para acessar esta página.");
+            window.location.href = "login_funcionario.html";
+        }
+        function logout() {
+            localStorage.removeItem("token");
+            alert("Você foi desconectado.");
             window.location.href = "login_funcionario.html";
         }
     </script>

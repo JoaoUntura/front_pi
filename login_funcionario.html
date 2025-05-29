@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabor do Campo - Login Funcionário</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="back-button">
@@ -29,32 +31,30 @@
                 <div id="feedback"></div>
             </form>
         </div>
-  
-    <script>
-        const baseUrl = 'http://18.231.170.201:80'
-        
-        const form = document.getElementById("login-funcionario-form")
-        form.addEventListener("submit", function(e){
-            e.preventDefault()
-            const data = {email:form.usuario.value, password:form.senha.value}
-            
-            fetch(`${baseUrl}/api/login`, {method:'POST', body:JSON.stringify(data), headers: {'Content-Type': 'application/json'}})
-            .then(response => response.json())
-            .then(data => {
-                if (data.success){
-                    alert('Login bem sucedido!')
-                    
-                    localStorage.setItem("token", data.token)
-                    window.location.href = "index.html"
-                }else{
-                    alert(data.message)
-                }
+
+        <script>
+            const baseUrl = 'http://18.231.170.201:80'
+
+            const form = document.getElementById("login-funcionario-form")
+            form.addEventListener("submit", function (e) {
+                e.preventDefault()
+                const data = { email: form.usuario.value, password: form.senha.value }
+
+                fetch(`${baseUrl}/api/login`, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Login bem sucedido!')
+
+                            localStorage.setItem("token", data.token)
+                            window.location.href = "index.html"
+                        } else {
+                            alert(data.message)
+                        }
+                    })
+
             })
-        
-
-        
-
-        })
-    </script>
+        </script>
 </body>
+
 </html>

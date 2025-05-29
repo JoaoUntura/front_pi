@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sabor do Campo - Gerenciamento de Produtos</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="back-button">
         <a href="index.html">Voltar à Página Inicial</a>
@@ -19,7 +21,7 @@
     <div class="main-content">
         <div class="container">
             <h2>Gerenciamento de Produtos</h2>
-          
+
             <table id="produtos-tabela">
                 <thead>
                     <tr>
@@ -36,92 +38,97 @@
             <div id="feedback"></div>
         </div>
 
- 
-       <script>
-        const baseUrl = 'http://18.231.170.201:80'
-        let produtos;
-        const table = document.getElementById("produtos-tabela-body")
-        function setProdutos(){
-            let token = localStorage.getItem("token")
-            fetch(`${baseUrl}/api/produto`, {headers: {"Authorization":`Bearer ${token}`}})
-            .then(response => response.json())
-            .then(data => {
-                produtos = data.values
-                produtos.forEach(element => {
 
-                    let row = document.createElement("tr")
-                    row.id = `${element.id}`
+        <script>
+            const baseUrl = 'http://18.231.170.201:80'
+            let produtos;
+            const table = document.getElementById("produtos-tabela-body")
+            function setProdutos() {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/produto`, { headers: { "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+                        produtos = data.values
+                        produtos.forEach(element => {
 
-                    let id = document.createElement("td")
-                    id.innerText = element.id
+                            let row = document.createElement("tr")
+                            row.id = `${element.id}`
 
-                    let nome = document.createElement("td")
-                    nome.innerHTML = `
+                            let id = document.createElement("td")
+                            id.innerText = element.id
+
+                            let nome = document.createElement("td")
+                            nome.innerHTML = `
                     <input value="${element.nome}" type="text" id=nome-${element.id}> </input>
                     `
 
-                    let preco = document.createElement("td")
-                    preco.innerHTML = `
+                            let preco = document.createElement("td")
+                            preco.innerHTML = `
                     <input value=${element.preco} type="number" id=preco-${element.id} step="0.01"> </input>
                     `
-                  
-                    let buttons = document.createElement("td")
-                    let button_editar =  document.createElement("button")
-                    button_editar.innerText = 'Editar'
-                    button_editar.className = "editar-button"
-                    button_editar.onclick = () => atualizarProduto(element.id)
 
-                    let button_remover = document.createElement("button")
-                    button_remover.innerText = 'Remover'
-                    button_remover.className = "remover-button"
-                    button_remover.onclick = () => deleteProduto(element.id)
+                            let buttons = document.createElement("td")
+                            let button_editar = document.createElement("button")
+                            button_editar.innerText = 'Editar'
+                            button_editar.className = "editar-button"
+                            button_editar.onclick = () => atualizarProduto(element.id)
 
-                    buttons.appendChild(button_editar)
-                    buttons.appendChild(button_remover)
-                    
-                    row.appendChild(id)
-                    row.appendChild(nome)
-                    row.appendChild(preco)
-                    row.appendChild(buttons)
+                            let button_remover = document.createElement("button")
+                            button_remover.innerText = 'Remover'
+                            button_remover.className = "remover-button"
+                            button_remover.onclick = () => deleteProduto(element.id)
 
-                    table.appendChild(row)
+                            buttons.appendChild(button_editar)
+                            buttons.appendChild(button_remover)
 
-                });
-            })
-        }
-        setProdutos()
+                            row.appendChild(id)
+                            row.appendChild(nome)
+                            row.appendChild(preco)
+                            row.appendChild(buttons)
 
-        function deleteProduto(id){
-        let token = localStorage.getItem("token")
-        fetch(`${baseUrl}/api/produto/${id}`, {method:'DELETE', headers:{"Authorization":`Bearer ${token}`} })
-        .then(response => response.json())
-        .then(data => {
-        
-            alert(data.message)
+                            table.appendChild(row)
 
-            if (data.success){
-                let row = document.getElementById(id)
-                table.removeChild(row)
+                        });
+                    })
             }
-        
-        })
-      }
+            setProdutos()
 
-          function atualizarProduto(id){
-            let inputNome = document.getElementById(`nome-${id}`)
-            let inputPreco = document.getElementById(`preco-${id}`)
-            let token = localStorage.getItem("token")
-            const data = {nome:inputNome.value, preco:parseFloat(inputPreco.value)}
-            console.log(data)
-           fetch(`${baseUrl}/api/produto/${id}`, {method:'PUT', body:JSON.stringify(data) ,headers:{'Content-Type': 'application/json',
-           "Authorization":`Bearer ${token}`} })
-            .then(response => response.json())
-            .then(data => {
+            function deleteProduto(id) {
+                let token = localStorage.getItem("token")
+                fetch(`${baseUrl}/api/produto/${id}`, { method: 'DELETE', headers: { "Authorization": `Bearer ${token}` } })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        alert(data.message)
+
+                        if (data.success) {
+                            let row = document.getElementById(id)
+                            table.removeChild(row)
+                        }
+
+                    })
+            }
+
+            function atualizarProduto(id) {
+                let inputNome = document.getElementById(`nome-${id}`)
+                let inputPreco = document.getElementById(`preco-${id}`)
+                let token = localStorage.getItem("token")
+                const data = { nome: inputNome.value, preco: parseFloat(inputPreco.value) }
                 console.log(data)
-                alert(data.message)
-               
-            })
-      }
-       </script>
+                fetch(`${baseUrl}/api/produto/${id}`, {
+                    method: 'PUT', body: JSON.stringify(data), headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        alert(data.message)
+
+                    })
+            }
+        </script>
 </body>
+
 </html>
