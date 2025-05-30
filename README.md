@@ -20,7 +20,7 @@ O objetivo deste sistema é digitalizar a operação do hortifrúti **Sabor do C
 ## 🛠 Tecnologias Utilizadas
 
 ### Frontend
-- Hopedado em GitHub Pages -> http://projetopi.shop/ - (login para testes -> email:emailteste2@gmail.com, senha:123)
+- Hopedado em GitHub Pages -> http://projetopi.shop/ 
 - HTML
 - CSS
 - JavaScript
@@ -61,3 +61,4 @@ Siga os passos abaixo para rodar o sistema localmente:
 
 - git clone https://github.com/JoaoUntura/front_pi
 - Abra o arquivo index.html com um duplo clique ou Live Server
+- Login para testes -> email: emailteste2@gmail.com, senha:123)
