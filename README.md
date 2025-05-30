@@ -1,6 +1,7 @@
 # 🥦 Sabor do Campo - Sistema de Gestão de Hortifrúti
 
-Link para acessar: http://projetopi.shop/ - (Login para testes -> email: emailteste2@gmail.com, senha: 123)
+Link para acessar: http://projetopi.shop/ 
+Login para testes -> email: emailteste2@gmail.com, senha: 123
 
 Sistema desenvolvido para facilitar a gestão do hortifrúti **Sabor do Campo**, com funcionalidades voltadas para o controle de produtos, pedidos e clientes do negócio.
 
@@ -61,4 +62,4 @@ Siga os passos abaixo para rodar o sistema localmente:
 
 - git clone https://github.com/JoaoUntura/front_pi
 - Abra o arquivo index.html com um duplo clique ou Live Server
-- Login para testes -> email: emailteste2@gmail.com, senha:123)
+- Login para testes -> email: emailteste2@gmail.com, senha:123
